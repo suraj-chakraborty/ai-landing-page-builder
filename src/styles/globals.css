@@ -1,0 +1,21 @@
+:root {
+    --primary-color: #3498db;
+    --secondary-color: #2ecc71;
+    --background-color: #ffffff;
+    --text-color: #333333;
+    --border-radius: 8px;
+  }
+  
+  [data-theme="dark"] {
+    --primary-color: #1abc9c;
+    --secondary-color: #9b59b6;
+    --background-color: #222222;
+    --text-color: #eeeeee;
+  }
+  
+  body {
+    background-color: var(--background-color);
+    color: var(--text-color);
+    font-family: sans-serif;
+  }
+  
