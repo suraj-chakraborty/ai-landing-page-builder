@@ -15,8 +15,8 @@ interface Section {
   id: string;
   type: string;
   library: string;
-  props: any;
-  children: any[];
+  props: unknown;
+  children: unknown[];
   customChildCSS?: Record<number, CSSProperties>;
   childClassNames?: Record<string, string>;
 }
@@ -132,7 +132,7 @@ export default function Home() {
   const [mounted, setMounted] = useState(false);
   const [sections, setSections] = useState<Section[]>([]);
   const [prompt, setPrompt] = useState("");
-  const [isFullPage, setIsFullPage] = useState(false);
+  // const [isFullPage, setIsFullPage] = useState(false);
   const router = useRouter();
 
   useEffect(() => {
@@ -167,7 +167,7 @@ export default function Home() {
     ]);
   };
 
-  const onUpdateSection = (index: number, props: any) => {
+  const onUpdateSection = (index: number, props: unknown) => {
     setSections((prev) =>
       prev.map((s, i) =>
         i === index ? { ...s, props } : s

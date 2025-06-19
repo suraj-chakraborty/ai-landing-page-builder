@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React from "react";
 import { COMPONENTS } from "@/components/ComponentRegistry";
 
@@ -45,12 +46,12 @@ const ChildComponentsEditor = ({
   };
 
   const handleDeleteChild = (childIndex: number) => {
-    setSections((prev) =>
+    setSections((prev: any[]) =>
       prev.map((s, i) =>
         i === index
           ? {
               ...s,
-              children: section.children?.filter((_, cIndex) => cIndex !== childIndex) || [],
+              children: section.children?.filter((_: any, cIndex: number) => cIndex !== childIndex) || [],
             }
           : s
       )
@@ -61,7 +62,7 @@ const ChildComponentsEditor = ({
     const updatedChildren = [...(section.children || [])]; // Ensure children is initialized
     updatedChildren[childIndex].props = { ...childProps[childIndex] };
 
-    setSections((prev) =>
+    setSections((prev: any[]) =>
       prev.map((s, i) =>
         i === index
           ? {
@@ -97,7 +98,7 @@ const ChildComponentsEditor = ({
     );
   }
 
-  const ChildComponent = COMPONENTS[childType]?.[childLibrary];
+  const ChildComponent = COMPONENTS[child.type as keyof typeof COMPONENTS]?.[child.library as keyof (typeof COMPONENTS)[keyof typeof COMPONENTS]];
 
   return ChildComponent ? (
     <div key={`${section.id}-child-${childIndex}`} className="mt-0">
@@ -140,11 +141,11 @@ const ChildComponentsEditor = ({
               onChange={(e) => handleChildLibraryChange(childIndex, e.target.value)}
               className="p-2 border rounded mb-4"
             >
-              {availableLibraries.map((library) => (
+                {availableLibraries.map((library: string) => (
                 <option key={library} value={library}>
                   {library}
                 </option>
-              ))}
+                ))}
             </select>
 
             {/* Render child properties for editing */}
@@ -286,7 +287,7 @@ const ChildComponentsEditor = ({
     </div>
   ) : (
     <div key={`${section.id}-child-${childIndex}`} className="text-red-500">
-      Child component not found for type "{childType}" and library "{childLibrary}"
+      Child component not found for type &quot;{childType}&quot; and library &quot;{childLibrary}&quot;
     </div>
   );
 })}

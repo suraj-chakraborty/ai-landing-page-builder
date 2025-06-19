@@ -18,17 +18,18 @@ interface Section {
   id: string;
   type: string;
   library: string;
-  props: any;
-  children: any[];
+  props: unknown;
+  children: unknown[];
 }
 
 interface CanvasProps {
   sections: Section[];
   setSections: React.Dispatch<React.SetStateAction<Section[]>>;
-  onUpdateSection: (index: number, props: any) => void;
+  onUpdateSection: (index: number, props: unknown) => void;
   isPreview?: boolean;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const Canvas = ({ sections, setSections, onUpdateSection, isPreview = false }: CanvasProps) => {
   const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
     if (isPreview) return;

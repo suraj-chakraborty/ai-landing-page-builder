@@ -3,6 +3,8 @@
 import React, { useState } from "react";
 import "./globals.css";
 import { ThemeProvider } from 'next-themes'
+import Link from "next/link";
+import Image from "next/image";
 
 const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -25,15 +27,15 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
             <nav className="container bg-white dark:bg-gray-800 md:bg-white dark:md:bg-gray-800 lg:bg-white dark:lg:bg-gray-800 mx-auto flex items-center justify-between py-4 px-2">
               {/* Logo Section */}
               <div className="flex items-center gap-2">
-                <img src="/favicon.ico" alt="Landing Page Builder Logo" className="w-8 h-8" />
+                <Image src="/favicon.ico" alt="Landing Page Builder Logo" className="w-8 h-8" />
                 <div className="text-xl font-semibold">Landing Page Builder</div>
               </div>
 
               {/* Navigation Links (Desktop) */}
               <div className="hidden bg-grey shadow-md py-4 px-6 md:flex gap-2">
-                <a href="/" className="text-gray-700 hover:text-blue-600">Home</a>
-                <a href="/preview" className="text-gray-700 hover:text-blue-600">Editor</a>
-                <a href="/about" className="text-gray-700 hover:text-blue-600">About</a>
+                <Link href="/" className="text-gray-700 hover:text-blue-600">Home</Link>
+                <Link href="/preview" className="text-gray-700 hover:text-blue-600">Editor</Link>
+                <Link href="/about" className="text-gray-700 hover:text-blue-600">About</Link>
               </div>
 
               {/* Mobile Menu Button */}
@@ -51,9 +53,9 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
             {/* Mobile Navigation Links */}
             {isMenuOpen && (
               <div className="md:hidden bg-white shadow-md py-4 px-6 absolute top-16 left-0 w-full" style={{backgroundColor: "inh"}}>
-                <a href="/" className="block text-gray-700 hover:text-blue-600 py-2">Home</a>
-                <a href="/editor" className="block text-gray-700 hover:text-blue-600 py-2">Editor</a>
-                <a href="/about" className="block text-gray-700 hover:text-blue-600 py-2">About</a>
+                <Link href="/" className="block text-gray-700 hover:text-blue-600 py-2">Home</Link>
+                <Link href="/editor" className="block text-gray-700 hover:text-blue-600 py-2">Editor</Link>
+                <Link href="/about" className="block text-gray-700 hover:text-blue-600 py-2">About</Link>
               </div>
             )}
           </header>

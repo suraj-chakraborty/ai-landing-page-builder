@@ -3,12 +3,13 @@
 import { useEffect, useState } from "react";
 import { useTheme } from "next-themes";
 import { useRouter } from "next/navigation";
-import { CSSProperties } from "react";
+// import { CSSProperties } from "react";
 import Canvas from "@/components/Canvas";
 
 export default function Preview() {
   const { theme, setTheme } = useTheme();
   const router = useRouter();
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [sections, setSections] = useState<any[]>([]);
   const [isEditing, setIsEditing] = useState(false);
 
@@ -19,6 +20,7 @@ export default function Preview() {
     }
   }, []);
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleUpdateSection = (index: number, props: any) => {
     setSections((prev) => {
       const newSections = [...prev];
