@@ -135,20 +135,22 @@ export default function Home() {
   // const [isFullPage, setIsFullPage] = useState(false);
   const router = useRouter();
 
-  useEffect(() => {
-    setMounted(true);
-    const savedSections = localStorage.getItem("sections");
-    if (savedSections) {
-      const parsedSections = JSON.parse(savedSections);
-      setSections(parsedSections);
-    }
-  }, []);
+ useEffect(() => {
+  setMounted(true);
+  const savedSections = localStorage.getItem("sections");
+  if (savedSections) {
+    const parsedSections = JSON.parse(savedSections);
+    setSections(parsedSections);
+  }
+}, []);
 
-  useEffect(() => {
-    if (sections.length > 0) {
-      localStorage.setItem("sections", JSON.stringify(sections));
-    }
-  }, [sections]);
+useEffect(() => {
+  if (sections.length > 0) {
+    localStorage.setItem("sections", JSON.stringify(sections));
+  }
+}, [sections]);
+
+
 
   if (!mounted) {
     return null;
@@ -380,9 +382,9 @@ The static website will be generated in the \`out\` directory.`;
       <div className="fixed top-4 right-4 z-50">
         <button
           onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
-          className="px-4 py-2 bg-gray-200 dark:bg-gray-700 rounded-md text-gray-800 dark:text-gray-200 hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors"
+          className="px-4 py-3 bg-gray-200 dark:bg-gray-700 rounded-md text-gray-800 dark:text-gray-200 dark:bg-white-400 hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors pt-2"
         >
-          {theme === 'dark' ? 'Light Mode' : 'Dark Mode'}
+          {theme === 'dark' ? "🌞" : "🌙"}
         </button>
       </div>
       <Sidebar onComponentClick={handleComponentClick} />

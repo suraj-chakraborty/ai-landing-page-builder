@@ -1,9 +1,10 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useState, useEffect } from "react";
 import EditableProperties from "./EditableProperties";
-import ChildComponentsEditor from "./ChildComponentsEditor";
-import CustomCSSEditor from "./CustomCSSEditor";
+// import ChildComponentsEditor from "./ChildComponentsEditor";
+// import CustomCSSEditor from "./CustomCSSEditor";
 import { COMPONENTS } from "@/components/ComponentRegistry";
-import EditableComponent from "./EditableComponent";
+// import EditableComponent from "./EditableComponent";
 import { Rnd } from "react-rnd";
 import  Modal  from "./Modal";
 
@@ -11,23 +12,29 @@ interface Section {
   id: string;
   type: string;
   library: string;
-  props: any;
-  children: any[];
+  props: object | any; 
+  children: Section[];
   customCSS?: string;
   customClassName?: string;
-  customChildCSS?: Record<string, any>;
-  childClassNames?: Record<string, string>;
+  customChildCSS?: object;
+  childClassNames?: string;
   layoutType?: 'flex' | 'grid' | 'flex-row' | 'flex-col';
   position?: { x: number; y: number };
   width?: string | number;
   height?: string | number;
 }
 
+
+type ChildComponent = {
+  type: string;
+  library: string;
+  props: Section["props"];
+};
 interface EditableSectionProps {
   section: Section;
   index: number;
   setSections: React.Dispatch<React.SetStateAction<Section[]>>;
-  onUpdateSection: (index: number, props: any) => void;
+  onUpdateSection: (index: number, props: object) => void;
   isPreview?: boolean;
 }
 
@@ -52,11 +59,11 @@ const EditableSection = ({
   );
   const [customClassName, setCustomClassName] = useState<string>(section.customClassName || "");
   const [editingError, setEditingError] = useState<string | null>(null);
-  const [childProps, setChildProps] = useState<any>({
+  const [childProps, setChildProps] = useState<string | any >({
     childCSS: section.customChildCSS || {},
     childClassNames: section.childClassNames || {},
   });
-  const [sectionLayoutType, setSectionLayoutType] = useState<string>(section.layoutType || "flex");
+  const [sectionLayoutType, setSectionLayoutType] = useState<Section["layoutType"]>(section.layoutType || "flex");
   const [childLayoutType, setChildLayoutType] = useState<string>("flex-col");
   const [isLayoutModalOpen, setIsLayoutModalOpen] = useState(false);
   const [isCSSModalOpen, setIsCSSModalOpen] = useState(false);
@@ -208,12 +215,12 @@ const EditableSection = ({
                   subtitle: editedProps.subtitle || s.props.subtitle, // Preserve subtitle if exists
                   buttonText: editedProps.buttonText || s.props.buttonText // Preserve button text if exists
                 },
-              library: selectedLibrary,
-              customCSS,
-              customClassName,
-              customChildCSS: childProps.childCSS,
-              childClassNames: childProps.childClassNames,
-                layoutType: sectionLayoutType,
+                library: selectedLibrary,
+                customCSS,
+                customClassName,
+                customChildCSS: childProps.childCSS,
+                childClassNames: childProps.childClassNames,
+                layoutType: sectionLayoutType as Section["layoutType"],
             }
           : s
       )
@@ -239,6 +246,7 @@ const EditableSection = ({
     }
   };
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleResizeStop = (e: any, direction: any, ref: any, delta: any, position: any) => {
     const width = ref.offsetWidth;
     const height = ref.offsetHeight;
@@ -254,6 +262,7 @@ const EditableSection = ({
     setIsResizing((prev) => !prev); // Toggle resizable state
   };
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleDragStop = (e: any, data: any) => {
     // Update the component's position in state
     setSections((prev) =>
@@ -281,16 +290,18 @@ const EditableSection = ({
   };
 
   const handleAddChild = () => {
-    const newChild = {
+    const newChild: Section = {
+      id: `${section.id}-child-${(section.children?.length || 0) + 1}`,
       type: section.type, // Use the same type as parent
       library: selectedLibrary,
       props: {
         title: "",
         subtitle: "",
         buttonText: "",
-        features: [], // Initialize empty features array if needed
-        style: {} // Initialize empty style object
-      }
+        features: [],
+        style: {}
+      },
+      children: [],
     };
 
     setSections((prev) => {
@@ -350,6 +361,7 @@ const EditableSection = ({
     setIsChildrenModalOpen(false);
   };
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleChildResizeStop = (childIndex: number, e: any, direction: any, ref: any, delta: any, position: any) => {
     const width = ref.offsetWidth;
     const height = ref.offsetHeight;
@@ -391,31 +403,44 @@ const EditableSection = ({
     );
   };
 
-  const handleChildLayoutChange = (layout: 'flex-row' | 'flex-col') => {
-    setChildLayoutType(layout);
-    setSections((prev) =>
-      prev.map((s, i) =>
-        i === index
-          ? {
-              ...s,
-              children: s.children.map((child) => ({
+const handleChildLayoutChange = (layout: 'flex-row' | 'flex-col') => {
+  setChildLayoutType(layout);
+  setSections((prev) => {
+    console.log("Previous sections before layout change:", prev);
+    
+    return prev.map((s, i) =>
+      i === index
+        ? {
+            ...s,
+            children: s.children.map((child) => {
+              console.log("Child before layout change:", child);
+              return {
                 ...child,
                 props: {
                   ...child.props,
                   style: {
-                    ...child.props.style,
+                    ...child.props?.style,
                     display: layout,
                     flexDirection: layout === 'flex-row' ? 'row' : 'column',
-                    width: layout === 'flex-row' ? '100%' : child.props.style?.width || '100%',
-                    height: layout === 'flex-col' ? '100%' : child.props.style?.height || 'auto'
-                  }
-                }
-              }))
-            }
-          : s
-      )
+                    width:
+                      layout === 'flex-row'
+                        ? '100%'
+                        : child.props?.style?.width || '100%',
+                    height:
+                      layout === 'flex-col'
+                        ? '100%'
+                        : child.props?.style?.height || 'auto',
+                  },
+                },
+              };
+            }),
+          }
+        : s
     );
-  };
+  });
+};
+
+
 
   const getLayoutClasses = (layout: string) => {
     switch (layout) {
@@ -553,8 +578,11 @@ const EditableSection = ({
   };
 
   // Also ensure that when editing starts, we properly load the existing values
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any
   const handleEditProperty = (prop: string, value: any) => {
-    setEditedProps((prev) => ({
+    
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    setEditedProps((prev: any) => ({
       ...prev,
       [prop]: value || prev[prop] // Keep existing value if new value is empty
     }));
@@ -662,7 +690,7 @@ const EditableSection = ({
 
         {/* Child Components */}
         {section.children && section.children.length > 0 && (
-          <div className={getLayoutClasses(sectionLayoutType)}>
+          <div className={getLayoutClasses(sectionLayoutType || "flex")}>
             {section.children.map((child, childIndex) => {
               const ChildComponent = COMPONENTS[child.type as keyof typeof COMPONENTS]?.[child.library as keyof (typeof COMPONENTS)[keyof typeof COMPONENTS]];
               
@@ -944,7 +972,7 @@ const EditableSection = ({
                     selectedLibrary={selectedLibrary}
                     setSelectedLibrary={setSelectedLibrary}
                     availableLibraries={Object.keys(
-                      COMPONENTS[section.type] || {}
+                      COMPONENTS[section.type as keyof typeof COMPONENTS] || {}
                     )}
                   />
               <div className="flex justify-end gap-2 mt-4">

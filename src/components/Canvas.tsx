@@ -18,8 +18,16 @@ interface Section {
   id: string;
   type: string;
   library: string;
-  props: unknown;
-  children: unknown[];
+  props: object;
+  children: Section[];
+  customCSS?: string;
+  customClassName?: string;
+  customChildCSS?: object;
+  childClassNames?: string;
+  layoutType?: 'flex' | 'grid' | 'flex-row' | 'flex-col';
+  position?: { x: number; y: number };
+  width?: string | number;
+  height?: string | number;
 }
 
 interface CanvasProps {
@@ -74,7 +82,14 @@ const Canvas = ({ sections, setSections, onUpdateSection, isPreview = false }: C
                 ...section,
                 children: [
                   ...(section.children || []),
-                  { ...newComponent, props: { ...defaultProps } },
+                  {
+                    id: generateUniqueId(),
+                    type: newComponent.type,
+                    library: newComponent.library,
+                    props: { ...defaultProps },
+                    children: [],
+                    // Optionally add other Section fields if needed
+                  },
                 ],
               }
             : section
@@ -119,6 +134,7 @@ const Canvas = ({ sections, setSections, onUpdateSection, isPreview = false }: C
           </div>
         )}
         {sections.map((section: Section, index: number) => (
+          console.log("Rendering section:", section),
           <EditableSection
             key={section.id}
             section={section}

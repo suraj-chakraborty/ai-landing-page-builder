@@ -1,6 +1,16 @@
 import React, { useEffect, useState } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
 
+interface CustomCSSEditorProps {
+  customCSS: string;
+  setCustomCSS: (css: string) => void;
+  customClassName: string;
+  setCustomClassName: (className: string) => void;
+  editingError?: string;
+  Component: React.ElementType;
+  componentProps?: Record<string, unknown>;
+}
+
 const CustomCSSEditor = ({
   customCSS,
   setCustomCSS,
@@ -9,13 +19,14 @@ const CustomCSSEditor = ({
   editingError,
   Component,
   componentProps,
-}: any) => {
+}: CustomCSSEditorProps) => {
   const [defaultCSS, setDefaultCSS] = useState("");
 
   // Extract unique HTML tags from the component's static markup
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const extractTagsFromComponent = (Component: any, props: any = {}): string[] => {
     try {
-      const renderedMarkup = renderToStaticMarkup(<Component {...props} />);
+      const renderedMarkup = renderToStaticMarkup(<Component {...props} defaultCSS={defaultCSS} />);
       const tagRegex = /<(\w+)[\s>]/g;
       const tags = new Set<string>();
       let match;

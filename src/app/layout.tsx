@@ -24,15 +24,15 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
       <body className="w-full min-h-screen bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100">
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
           <header className="bg-white dark:bg-gray-800 shadow-sm fixed top-0 w-full z-50">
-            <nav className="container bg-white dark:bg-gray-800 md:bg-white dark:md:bg-gray-800 lg:bg-white dark:lg:bg-gray-800 mx-auto flex items-center justify-between py-4 px-2">
+            <nav className="container w-4/5 bg-white dark:bg-gray-800 md:bg-white dark:md:bg-gray-800 lg:bg-white dark:lg:bg-gray-800 mx-auto flex items-center justify-between py-4 px-2">
               {/* Logo Section */}
               <div className="flex items-center gap-2">
-                <Image src="/favicon.ico" alt="Landing Page Builder Logo" className="w-8 h-8" />
+                <Image src="/favicon.ico" width={20} height={20} alt="Landing Page Builder Logo" className="w-8 h-8" />
                 <div className="text-xl font-semibold">Landing Page Builder</div>
               </div>
 
               {/* Navigation Links (Desktop) */}
-              <div className="hidden bg-grey shadow-md py-4 px-6 md:flex gap-2">
+              <div className=" flex justify-center hidden bg-grey align-center shadow-md py-4 px-6 md:flex gap-2">
                 <Link href="/" className="text-gray-700 hover:text-blue-600">Home</Link>
                 <Link href="/preview" className="text-gray-700 hover:text-blue-600">Editor</Link>
                 <Link href="/about" className="text-gray-700 hover:text-blue-600">About</Link>
