@@ -15,7 +15,7 @@ interface Section {
   id: string;
   type: string;
   library: string;
-  props: unknown;
+  props: object;
   children: unknown[];
   customChildCSS?: Record<number, CSSProperties>;
   childClassNames?: Record<string, string>;

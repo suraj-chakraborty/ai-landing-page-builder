@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
+import { useCallback } from "react";
+
 
 interface CustomCSSEditorProps {
   customCSS: string;
@@ -24,32 +26,56 @@ const CustomCSSEditor = ({
 
   // Extract unique HTML tags from the component's static markup
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const extractTagsFromComponent = (Component: any, props: any = {}): string[] => {
-    try {
-      const renderedMarkup = renderToStaticMarkup(<Component {...props} defaultCSS={defaultCSS} />);
-      const tagRegex = /<(\w+)[\s>]/g;
-      const tags = new Set<string>();
-      let match;
+  // const extractTagsFromComponent = (Component: any, props: any = {}): string[] => {
+  //   try {
+  //     const renderedMarkup = renderToStaticMarkup(<Component {...props} defaultCSS={defaultCSS} />);
+  //     const tagRegex = /<(\w+)[\s>]/g;
+  //     const tags = new Set<string>();
+  //     let match;
 
-      while ((match = tagRegex.exec(renderedMarkup)) !== null) {
-        tags.add(match[1]); // Add unique tag name
-      }
+  //     while ((match = tagRegex.exec(renderedMarkup)) !== null) {
+  //       tags.add(match[1]); // Add unique tag name
+  //     }
 
-      return Array.from(tags);
-    } catch (error) {
-      console.error("Error extracting tags:", error);
-      return [];
+  //     return Array.from(tags);
+  //   } catch (error) {
+  //     console.error("Error extracting tags:", error);
+  //     return [];
+  //   }
+  // };
+
+
+
+// Inside your component:
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const extractTagsFromComponent = useCallback((Component: any, props: any = {}): string[] => {
+  try {
+    const renderedMarkup = renderToStaticMarkup(<Component {...props} defaultCSS={defaultCSS} />);
+    const tagRegex = /<(\w+)[\s>]/g;
+    const tags = new Set<string>();
+    let match;
+
+    while ((match = tagRegex.exec(renderedMarkup)) !== null) {
+      tags.add(match[1]);
     }
-  };
+
+    return Array.from(tags);
+  } catch (error) {
+    console.error("Error extracting tags:", error);
+    return [];
+  }
+}, [defaultCSS]); // ✅ only include `defaultCSS` since it's the only external reference
+
 
   // Initialize default CSS template based on extracted tags
-  useEffect(() => {
-    if (Component) {
-      const tags = extractTagsFromComponent(Component, componentProps);
-      const template = tags.map((tag) => `${tag} { /* add your css here */ }`).join("\n");
-      setDefaultCSS(template);
-    }
-  }, [Component, componentProps]);
+ useEffect(() => {
+  if (Component) {
+    const tags = extractTagsFromComponent(Component, componentProps);
+    const template = tags.map((tag) => `${tag} { /* add your css here */ }`).join("\n");
+    setDefaultCSS(template);
+  }
+}, [extractTagsFromComponent, Component, componentProps]);
+
 
   // Handle changes to the custom CSS textarea
   const handleCSSChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {

@@ -1,8 +1,10 @@
 import React from "react";
 
 interface EditablePropertiesProps {
-  editedProps: any;
-  setEditedProps: (props: any) => void;
+  
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  editedProps: any; 
+  setEditedProps: (props: unknown) => void;
   selectedLibrary: string;
   setSelectedLibrary: (library: string) => void;
   availableLibraries: string[];
@@ -16,25 +18,25 @@ const EditableProperties = ({
   selectedLibrary,
   setSelectedLibrary,
   availableLibraries,
-  isChild = false,
-  parentType = ""
-}: any) => {
-  const handleChange = (prop: string, value: any) => {
-    setEditedProps((prev: any) => ({
+  // isChild = false,
+  // parentType = ""
+}: EditablePropertiesProps) => {
+  const handleChange = (prop: string, value: unknown) => {
+    setEditedProps((prev: object) => ({
       ...prev, [prop]: value
     }));
   };
 
   console.log("availableLibraries", availableLibraries);
 
-  const handleLibraryChange = (library: string) => {
-    setSelectedLibrary(library);
-    // Reset props when library changes
-    setEditedProps({
-      ...editedProps.style // Preserve any existing styles
-    });
+  // const handleLibraryChange = (library: string) => {
+  //   setSelectedLibrary(library);
+  //   // Reset props when library changes
+  //   setEditedProps({
+  //     ...editedProps.style // Preserve any existing styles
+  //   });
     
-  };
+  // };
 
   // const renderArrayProperty = (prop: string, value: any[]) => {
   //   return (
@@ -77,45 +79,45 @@ const EditableProperties = ({
   // };
 
 
-  const renderArrayProperty = (prop: string, value: any[]) => {
-    return (
-      <div className="mt-2 p-2 border rounded bg-gray-100">
-        <h4 className="font-medium">{prop} (Array)</h4>
-        {value.map((item, index) => (
-          <div key={index} className="mb-2 p-2 border rounded bg-gray-50">
-            {typeof item === "object" ? (
-              Object.entries(item).map(([key, val]) => (
-                <div key={key} className="mb-2">
-                  <label className="block font-medium">{key}</label>
-                  <input
-                    type="text"
-                    value={val || ""}
-                    onChange={(e) => {
-                      const updatedArray = [...value];
-                      updatedArray[index] = { ...item, [key]: e.target.value };
-                      handleChange(prop, updatedArray);
-                    }}
-                    className="p-2 border rounded w-full"
-                  />
-                </div>
-              ))
-            ) : (
-              <input
-                type="text"
-                value={item || ""}
-                onChange={(e) => {
-                  const updatedArray = [...value];
-                  updatedArray[index] = e.target.value;
-                  handleChange(prop, updatedArray);
-                }}
-                className="p-2 border rounded w-full"
-              />
-            )}
-          </div>
-        ))}
-      </div>
-    );
-  };
+  const renderArrayProperty = (prop: string, value: (string | Record<string, string>)[]) => {
+      return (
+        <div className="mt-2 p-2 border rounded bg-gray-100">
+          <h4 className="font-medium">{prop} (Array)</h4>
+          {value.map((item, index) => (
+            <div key={index} className="mb-2 p-2 border rounded bg-gray-50">
+              {typeof item === "object" && item !== null ? (
+                Object.entries(item).map(([key, val]) => (
+                  <div key={key} className="mb-2">
+                    <label className="block font-medium">{key}</label>
+                    <input
+                      type="text"
+                      value={val || ""}
+                      onChange={(e) => {
+                        const updatedArray = [...value];
+                        updatedArray[index] = { ...(item as object), [key]: e.target.value };
+                        handleChange(prop, updatedArray);
+                      }}
+                      className="p-2 border rounded w-full"
+                    />
+                  </div>
+                ))
+              ) : (
+                <input
+                  type="text"
+                  value={item || ""}
+                  onChange={(e) => {
+                    const updatedArray = [...value];
+                    updatedArray[index] = e.target.value;
+                    handleChange(prop, updatedArray);
+                  }}
+                  className="p-2 border rounded w-full"
+                />
+              )}
+            </div>
+          ))}
+        </div>
+      );
+    };
 
   return (
     <div className="space-y-4">

@@ -12,6 +12,7 @@ interface Section {
   id: string;
   type: string;
   library: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   props: object | any; 
   children: Section[];
   customCSS?: string;
@@ -26,9 +27,11 @@ interface Section {
 
 
 type ChildComponent = {
+  id: string;
   type: string;
   library: string;
-  props: Section["props"];
+  props: Record<string, unknown>;
+  
 };
 interface EditableSectionProps {
   section: Section;
@@ -59,6 +62,7 @@ const EditableSection = ({
   );
   const [customClassName, setCustomClassName] = useState<string>(section.customClassName || "");
   const [editingError, setEditingError] = useState<string | null>(null);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [childProps, setChildProps] = useState<string | any >({
     childCSS: section.customChildCSS || {},
     childClassNames: section.childClassNames || {},
@@ -133,7 +137,7 @@ const EditableSection = ({
         }
       )
       .join("\n");
-  }, [childProps, section.id]);
+  }, [childProps, section.id, section.layoutType]);
 
   // Load available CSS classes from localStorage
   useEffect(() => {

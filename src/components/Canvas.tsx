@@ -19,7 +19,7 @@ interface Section {
   type: string;
   library: string;
   props: object;
-  children: Section[];
+  children: unknown[];
   customCSS?: string;
   customClassName?: string;
   customChildCSS?: object;
