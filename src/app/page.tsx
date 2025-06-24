@@ -9,15 +9,14 @@ import { saveAs } from "file-saver";
 import Sidebar from "@/components/Sidebar";
 import { parsePromptToSections } from "@/utils/parsePromptToSections";
 import { useTheme } from "next-themes";
-import { CSSProperties } from "react";
 
 interface Section {
   id: string;
   type: string;
   library: string;
-  props: object;
-  children: unknown[];
-  customChildCSS?: Record<number, CSSProperties>;
+  props: unknown;
+  children: Section[];
+  customChildCSS?: Record<number, React.CSSProperties>;
   childClassNames?: Record<string, string>;
 }
 

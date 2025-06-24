@@ -1,5 +1,5 @@
 import React from "react";
-import { Grid, Card, CardContent, Typography, Avatar } from "@mui/material";
+import { Grid, Card, CardContent, Typography } from "@mui/material";
 import { Settings, Public, AccessTime } from "@mui/icons-material";
 
 const FeaturesMui = ({ features=[] }) => {
@@ -13,9 +13,9 @@ const FeaturesMui = ({ features=[] }) => {
         <Grid item xs={12} sm={6} md={4} key={index}>
           <Card>
             <CardContent>
-              <Avatar style={{ backgroundColor: "#3f51b5", marginBottom: 8 }}>
+              {/* <Avatar style={{ backgroundColor: "#3f51b5", marginBottom: 8 }}>
                 {feature.icon}
-              </Avatar>
+              </Avatar> */}
               <Typography variant="h6">{feature.title}</Typography>
               <Typography color="textSecondary">{feature.description}</Typography>
             </CardContent>

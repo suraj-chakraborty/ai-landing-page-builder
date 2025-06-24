@@ -17,8 +17,8 @@ interface Section {
   children: Section[];
   customCSS?: string;
   customClassName?: string;
-  customChildCSS?: object;
-  childClassNames?: string;
+  customChildCSS?: Record<number, React.CSSProperties>;
+  childClassNames?: Record<string, string>;
   layoutType?: 'flex' | 'grid' | 'flex-row' | 'flex-col';
   position?: { x: number; y: number };
   width?: string | number;
